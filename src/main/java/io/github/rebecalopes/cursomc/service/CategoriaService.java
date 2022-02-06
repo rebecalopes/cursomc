@@ -5,6 +5,8 @@ import io.github.rebecalopes.cursomc.repositories.CategoriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class CategoriaService {
 
@@ -12,8 +14,8 @@ public class CategoriaService {
     private CategoriaRepository repository;
 
     public Categoria buscar(Integer id){
-        Categoria objeto = repository.findOne(id);
-                return objeto;
+        Optional<Categoria> categoria = repository.findById(id);
+                return categoria.orElse(null);
 
     }
 }
