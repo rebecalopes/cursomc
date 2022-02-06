@@ -3,28 +3,28 @@ package io.github.rebecalopes.cursomc.domain;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
 @Entity
-public class Categoria implements Serializable {
+public class Produto implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String nome;
+    private Double preco;
 
-    @ManyToMany(mappedBy = "listaCategorias")
-    private List<Produto> listaProdutos = new ArrayList<>();
+    @ManyToMany
+    @JoinTable(name="PRODUTO_CATEGORIA",
+            joinColumns = @JoinColumn(name="produto_id"),
+            inverseJoinColumns = @JoinColumn(name="categoria_id")
+    )
+    private List<Categoria> listaCategorias;
 
-    public  Categoria() {
-    }
-
-    public Categoria(Integer id, String nome) {
-        this.id = id;
-        this.nome = nome;
+    {
+        listaCategorias = new ArrayList<>();
     }
 
     public Integer getId() {
@@ -43,35 +43,32 @@ public class Categoria implements Serializable {
         this.nome = nome;
     }
 
-    public List<Produto> getListaProdutos() {
-        return listaProdutos;
+    public Double getPreco() {
+        return preco;
     }
 
-    public void setListaProdutos(List<Produto> listaProdutos) {
-        this.listaProdutos = listaProdutos;
+    public void setPreco(Double preco) {
+        this.preco = preco;
+    }
+
+    public List<Categoria> getListaCategorias() {
+        return listaCategorias;
+    }
+
+    public void setListaCategorias(List<Categoria> listaCategorias) {
+        this.listaCategorias = listaCategorias;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Categoria categoria = (Categoria) o;
-        return Objects.equals(id, categoria.id);
+        Produto produto = (Produto) o;
+        return Objects.equals(id, produto.id);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(id);
-    }
-
-    @ManyToMany(mappedBy = "listaCategorias")
-    private Collection<Produto> produtos;
-
-    public Collection<Produto> getProdutos() {
-        return produtos;
-    }
-
-    public void setProdutos(Collection<Produto> produtos) {
-        this.produtos = produtos;
     }
 }
